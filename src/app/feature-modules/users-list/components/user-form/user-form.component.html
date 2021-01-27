@@ -1,0 +1,74 @@
+<ng-container [ngSwitch]="action">
+  <h2 mat-raised-button *ngSwitchCase="userActionsEnum.Add">Add User</h2>
+  <h2 mat-raised-button *ngSwitchCase="userActionsEnum.Edit">Edit User</h2>
+</ng-container>
+
+<form [formGroup]="userForm">
+  <mat-form-field class="example-full-width">
+    <mat-label>Name</mat-label>
+    <input
+      type="email"
+      matInput
+      [formControl]="nameCtrl"
+      placeholder="Ex. pat@example.com"
+    />
+    <mat-error *ngIf="nameCtrl.hasError('required')">
+      Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Email</mat-label>
+    <input
+      type="email"
+      matInput
+      [formControl]="emailCtrl"
+      placeholder="Ex. pat@example.com"
+    />
+    <mat-error
+      *ngIf="emailCtrl.hasError('email') && !emailCtrl.hasError('required')"
+    >
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailCtrl.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Phone</mat-label>
+    <input
+      type="phone"
+      matInput
+      [formControl]="phoneCtrl"
+      placeholder="Ex. joe@example.com"
+    />
+    <mat-error *ngIf="phoneCtrl.hasError('required')">
+      Phone is <strong>required</strong>
+    </mat-error>
+    <mat-error
+      *ngIf="phoneCtrl.hasError('phone') && !phoneCtrl.hasError('required')"
+    >
+      Phone is not valid
+    </mat-error>
+  </mat-form-field>
+
+  <ng-container [ngSwitch]="action">
+    <button
+      mat-raised-button
+      *ngSwitchCase="userActionsEnum.Add"
+      (click)="confirm()"
+      [disabled]="userForm.invalid"
+    >
+      Add User
+    </button>
+    <button
+      mat-raised-button
+      *ngSwitchCase="userActionsEnum.Edit"
+      (click)="confirm()"
+      [disabled]="userForm.invalid"
+    >
+      Update User
+    </button>
+  </ng-container>
+</form>

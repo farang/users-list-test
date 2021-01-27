@@ -1,0 +1,18 @@
+mat-form-field.mat-form-field {
+  display: block;
+  margin: 0 5px;
+}
+
+mat-form-field.mat-form-field[hidden] {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.text-content {
+  padding: 24px 5px 14px 10px;
+}
+
+.error-block {
+  margin-bottom: 10px;
+}

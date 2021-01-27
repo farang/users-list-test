@@ -1,0 +1,18 @@
+table {
+  width: 100%;
+}
+
+.tools-panel {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.mat-row:not(.no-data) .mat-cell {
+    vertical-align: top;
+}
+
+td mat-icon {
+    cursor: pointer;
+    padding: 10px;
+}
