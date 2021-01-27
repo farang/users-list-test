@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import phoneNumberValidator from '../../validators/phoneValidator';
   styleUrls: ['./user-form.component.scss'],
   providers: [PhonePipe],
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, OnDestroy {
   @Input() action: UserAction;
 
   public nameCtrl = new FormControl(null, [Validators.required]);
@@ -39,32 +39,32 @@ export class UserFormComponent implements OnInit {
 
   public userActionsEnum = UserActionsEnum;
 
-  private _subs = new Subscription();
+  private subscriptions = new Subscription();
 
   set subs(sub: Subscription) {
-    this._subs.add(sub);
+    this.subscriptions.add(sub);
   }
 
   constructor(
-    private _phonePipe: PhonePipe,
-    private _dialogRef: MatDialogRef<UserFormComponent>
+    private phonePipe: PhonePipe,
+    private dialogRef: MatDialogRef<UserFormComponent>
   ) {
     this.action = UserActionsEnum.Add;
   }
 
   ngOnInit(): void {
     this.subs = this.phoneCtrl.valueChanges.subscribe((value) => {
-      this.phoneCtrl.setValue(this._phonePipe.transform(value), {
+      this.phoneCtrl.setValue(this.phonePipe.transform(value), {
         emitEvent: false,
       });
     });
   }
 
   ngOnDestroy(): void {
-    this._subs.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  confirm() {
-    this._dialogRef.close(this.userForm.value);
+  confirm(): void {
+    this.dialogRef.close(this.userForm.value);
   }
 }

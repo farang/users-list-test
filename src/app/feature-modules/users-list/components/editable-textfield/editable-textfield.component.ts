@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
   FormControl,
   ValidationErrors,
@@ -12,27 +12,30 @@ import { Subscription } from 'rxjs';
   templateUrl: './editable-textfield.component.html',
   styleUrls: ['./editable-textfield.component.scss'],
 })
-export class EditableTextfieldComponent implements OnInit {
+export class EditableTextfieldComponent implements OnInit, OnDestroy {
   @Input() value: string;
+
+  @Output() saveValue = new EventEmitter<string>();
 
   @Input() validators: ValidatorFn | ValidatorFn[] | null = null;
 
-  @Input() mask = (v: any) => v;
-
-  @Output() saveValue = new EventEmitter<string>();
+  @Input() mask: (v: string) => string;
 
   public editMode = false;
 
   public ctrl = new FormControl();
 
-  private _subs = new Subscription();
+  public prevValue = '';
+
+  private subscriptions = new Subscription();
 
   set subs(sub: Subscription) {
-    this._subs.add(sub);
+    this.subscriptions.add(sub);
   }
 
   constructor() {
     this.value = '';
+    this.mask = (v: string) => v;
   }
 
   ngOnInit(): void {
@@ -47,11 +50,18 @@ export class EditableTextfieldComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this._subs.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  save() {
+  save(): void {
     this.saveValue.emit(this.ctrl.value);
     this.editMode = false;
   }
+
+  cancel(): void {
+    this.saveValue.emit(this.prevValue);
+    this.editMode = false;
+    this.ctrl.setValue(this.prevValue);
+  }
+
 }

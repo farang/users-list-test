@@ -13,9 +13,9 @@ export class UsersStateService {
 
   public userActionLoading$ = new BehaviorSubject(true);
 
-  constructor(private _userDataService: UsersDataService) {}
+  constructor(private userDataService: UsersDataService) {}
 
-  public applyAction(action: UserAction, user: UserInfoI) {
+  public applyAction(action: UserAction, user: UserInfoI): void {
     switch (action) {
       case UserActionsEnum.Add: {
         this.addUser(user);
@@ -35,42 +35,42 @@ export class UsersStateService {
     }
   }
 
-  public updateUsers() {
+  public updateUsers(): void {
     this.userActionLoading$.next(true);
 
-    this._userDataService
+    this.userDataService
       .getUsers()
       .subscribe((usersList) => this._updateUsersList(usersList));
   }
 
-  private addUser(user: UserInfoI) {
+  private addUser(user: UserInfoI): void {
     this.userActionLoading$.next(true);
 
-    this._userDataService
+    this.userDataService
       .addUser(user)
-      .pipe(switchMap(() => this._userDataService.getUsers()))
+      .pipe(switchMap(() => this.userDataService.getUsers()))
       .subscribe((usersList) => this._updateUsersList(usersList));
   }
 
-  private updateUser(user: UserInfoI) {
+  private updateUser(user: UserInfoI): void {
     this.userActionLoading$.next(true);
 
-    this._userDataService
+    this.userDataService
       .updateUser(user)
-      .pipe(switchMap(() => this._userDataService.getUsers()))
+      .pipe(switchMap(() => this.userDataService.getUsers()))
       .subscribe((usersList) => this._updateUsersList(usersList));
   }
 
-  private removeUser(user: UserInfoI) {
+  private removeUser(user: UserInfoI): void {
     this.userActionLoading$.next(true);
 
-    this._userDataService
+    this.userDataService
       .removeUser(user)
-      .pipe(switchMap(() => this._userDataService.getUsers()))
+      .pipe(switchMap(() => this.userDataService.getUsers()))
       .subscribe((usersList) => this._updateUsersList(usersList));
   }
 
-  private _updateUsersList(usersList: UserInfoI[]) {
+  private _updateUsersList(usersList: UserInfoI[]): void {
     this.usersList$.next(usersList);
     this.userActionLoading$.next(false);
   }

@@ -9,7 +9,7 @@
     <input
       type="email"
       matInput
-      [formControl]="nameCtrl"
+      formControlName="Name"
       placeholder="Ex. pat@example.com"
     />
     <mat-error *ngIf="nameCtrl.hasError('required')">
@@ -22,7 +22,7 @@
     <input
       type="email"
       matInput
-      [formControl]="emailCtrl"
+      formControlName="Email"
       placeholder="Ex. pat@example.com"
     />
     <mat-error
@@ -40,7 +40,7 @@
     <input
       type="phone"
       matInput
-      [formControl]="phoneCtrl"
+      formControlName="Phone"
       placeholder="Ex. joe@example.com"
     />
     <mat-error *ngIf="phoneCtrl.hasError('required')">

@@ -1,16 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-
 const routes: Routes = [
   {
     path: 'users-list',
-    loadChildren: () => import('./feature-modules/users-list/users-list.module').then(m => m.UsersListModule)
-  }
+    loadChildren: () =>
+      import('./feature-modules/users-list/users-list.module').then(
+        (m) => m.UsersListModule
+      ),
+  },
+  {
+    path: '**',
+    redirectTo: 'users-list',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserInfoI } from '../../interfaces/user-info-i';
 import { UsersStateService } from '../../services/state/users-state.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./users-list-table.component.scss'],
   providers: [PhonePipe],
 })
-export class UsersListTableComponent implements OnInit {
+export class UsersListTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['Name', 'Email', 'Phone', 'Actions'];
 
   public usersList: UserInfoI[] = [];
@@ -27,55 +27,55 @@ export class UsersListTableComponent implements OnInit {
 
   public phoneNumberValidator = phoneNumberValidator;
 
-  private _subs = new Subscription();
+  private subscriptions = new Subscription();
 
   set subs(sub: Subscription) {
-    this._subs.add(sub);
+    this.subscriptions.add(sub);
   }
 
   constructor(
     public dialog: MatDialog,
-    private _phonePipe: PhonePipe,
-    private _userStateService: UsersStateService
+    private phonePipe: PhonePipe,
+    private userStateService: UsersStateService
   ) {}
 
   ngOnInit(): void {
-    this.subs = this._userStateService.usersList$.subscribe((usersList) => {
+    this.subs = this.userStateService.usersList$.subscribe((usersList) => {
       this.usersList = usersList.slice();
     });
   }
 
   ngOnDestroy(): void {
-    this._subs.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
-  phoneMask = (value: string) => this._phonePipe.transform(value);
+  phoneMask = (value: string) => this.phonePipe.transform(value);
 
-  updateField(userinfo: any, fieldName: any, value: any) {
+  updateField(userinfo: any, fieldName: any, value: any): void {
     userinfo[fieldName] = value;
 
-    this._userStateService.applyAction(UserActionsEnum.Edit, userinfo);
+    this.userStateService.applyAction(UserActionsEnum.Edit, userinfo);
   }
 
-  showNewUserPopup() {
+  showNewUserPopup(): void {
     const dialogRef = this.dialog.open(UserFormComponent);
 
     dialogRef
       .afterClosed()
       .pipe(filter((data) => !!data))
       .subscribe((userinfo: UserInfoI) => {
-        userinfo.ID = this._userStateService.usersList$.value.length;
-        this._userStateService.applyAction(UserActionsEnum.Add, userinfo);
+        userinfo.ID = this.userStateService.usersList$.value.length;
+        this.userStateService.applyAction(UserActionsEnum.Add, userinfo);
       });
   }
 
-  deleteRecord(user: UserInfoI) {
+  deleteRecord(user: UserInfoI): void {
     if (confirm(`Are you sure you want to delete the user ${user.Name}?`)) {
-      this._userStateService.applyAction(UserActionsEnum.Remove, user);
+      this.userStateService.applyAction(UserActionsEnum.Remove, user);
     }
   }
 
-  editRecord(user: UserInfoI) {
+  editRecord(user: UserInfoI): void {
     const dialogRef = this.dialog.open(UserFormComponent);
 
     dialogRef.componentInstance.action = UserActionsEnum.Edit;
@@ -86,7 +86,7 @@ export class UsersListTableComponent implements OnInit {
       .pipe(filter((data) => !!data))
       .subscribe((userinfo: UserInfoI) => {
         if (userinfo) {
-          this._userStateService.applyAction(UserActionsEnum.Edit, userinfo);
+          this.userStateService.applyAction(UserActionsEnum.Edit, userinfo);
         }
       });
   }
