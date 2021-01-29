@@ -10,10 +10,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EditableTextfieldComponent } from './components/editable-textfield/editable-textfield.component';
-import { PhonePipe } from './pipe/phone.pipe';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+
+const ngxMaskConfig: Partial<IConfig> = {
+  validation: false,
+};
 
 @NgModule({
-  declarations: [UsersListTableComponent, UserFormComponent, EditableTextfieldComponent, PhonePipe],
+  declarations: [
+    UsersListTableComponent,
+    UserFormComponent,
+    EditableTextfieldComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -23,6 +31,7 @@ import { PhonePipe } from './pipe/phone.pipe';
     MatTableModule,
     MatInputModule,
     MatIconModule,
+    NgxMaskModule.forRoot(ngxMaskConfig),
     RouterModule.forChild([
       {
         path: '',

@@ -7,7 +7,7 @@
 </div>
 
 <mat-form-field [hidden]="!editMode" appearance="fill">
-  <input matInput #matFieldEl [formControl]="ctrl" />
+  <input matInput #matFieldEl [mask]="mask || ''" [formControl]="ctrl" />
   <button mat-icon-button matSuffix (click)="save()" [disabled]="ctrl.invalid">
     <mat-icon>save</mat-icon>
   </button>

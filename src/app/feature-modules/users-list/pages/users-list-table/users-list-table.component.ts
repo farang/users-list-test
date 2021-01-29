@@ -6,15 +6,14 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
 import { UserActionsEnum } from '../../enums/user-actions-enum';
 import { filter } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
-import { PhonePipe } from '../../pipe/phone.pipe';
-import phoneNumberValidator from '../../validators/phoneValidator';
 import { Subscription } from 'rxjs';
+import { PHONE_MASK } from '../../constants/masks';
+import CustomValidators from '../../validators/CustomValidators';
 
 @Component({
   selector: 'app-users-list-table',
   templateUrl: './users-list-table.component.html',
   styleUrls: ['./users-list-table.component.scss'],
-  providers: [PhonePipe],
 })
 export class UsersListTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = ['Name', 'Email', 'Phone', 'Actions'];
@@ -25,7 +24,7 @@ export class UsersListTableComponent implements OnInit, OnDestroy {
 
   public validators = Validators;
 
-  public phoneNumberValidator = phoneNumberValidator;
+  public customValidators = CustomValidators;
 
   private subscriptions = new Subscription();
 
@@ -33,9 +32,10 @@ export class UsersListTableComponent implements OnInit, OnDestroy {
     this.subscriptions.add(sub);
   }
 
+  public PHONE_MASK = PHONE_MASK;
+
   constructor(
     public dialog: MatDialog,
-    private phonePipe: PhonePipe,
     private userStateService: UsersStateService
   ) {}
 
@@ -48,8 +48,6 @@ export class UsersListTableComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-
-  phoneMask = (value: string) => this.phonePipe.transform(value);
 
   updateField(userinfo: any, fieldName: any, value: any): void {
     userinfo[fieldName] = value;

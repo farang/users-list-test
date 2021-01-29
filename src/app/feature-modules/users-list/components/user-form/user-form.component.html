@@ -42,6 +42,7 @@
       matInput
       formControlName="Phone"
       placeholder="Ex. joe@example.com"
+      [mask]='PHONE_MASK'
     />
     <mat-error *ngIf="phoneCtrl.hasError('required')">
       Phone is <strong>required</strong>

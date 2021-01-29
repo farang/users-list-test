@@ -39,8 +39,8 @@
       <td mat-cell *matCellDef="let user">
         <app-editable-textfield
           [value]="user.Phone"
-          [mask]="phoneMask"
-          [validators]="[validators.required, phoneNumberValidator]"
+          [mask]="PHONE_MASK"
+          [validators]="[validators.required, customValidators.phone]"
           (saveValue)="updateField(user, 'Phone', $event)"
           >{{ user.Phone }}</app-editable-textfield
         >
